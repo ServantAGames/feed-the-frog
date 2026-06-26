@@ -111,6 +111,7 @@
     animation: mouth-receive 4s cubic-bezier(.22,.68,.18,1) forwards;
   }
 
+  /* THEME TOGGLE */
   #theme-toggle {
     position: fixed;
     top: 16px; right: 16px;
@@ -130,6 +131,7 @@
   #theme-toggle:hover { transform: scale(1.1) rotate(15deg); }
   #theme-toggle:active { transform: scale(0.92); }
 
+  /* HEADER */
   #header { text-align: center; padding: 14px 20px 4px; z-index: 10; }
   #header h1 {
     font-size: 2rem;
@@ -140,6 +142,7 @@
     transition: color 0.4s ease;
   }
 
+  /* SCENE */
   #scene {
     flex: 1; width: 100vw;
     position: relative;
@@ -215,6 +218,7 @@
   }
   #frog-face:hover #frog-label { opacity: 1; }
 
+  /* The mouth gapes open */
   #frog-svg .mouth {
     transform-box: fill-box; transform-origin: center top;
     transform: scaleY(0.07);
@@ -222,6 +226,7 @@
   }
   #frog-face.open #frog-svg .mouth { transform: scaleY(1); }
 
+  /* PAYMENT MENU (inside the mouth) */
   #payment-menu {
     position: absolute;
     top: 72%; left: 50%;
@@ -238,6 +243,7 @@
     transition-delay: 0.12s;
   }
 
+  /* BRANDED PAYMENT BUTTONS */
   .pay-btn {
     display: flex; align-items: center; justify-content: center;
     gap: 7px;
@@ -249,9 +255,11 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
   }
+  .pay-btn svg { display: block; height: 1em; width: auto; }
   .pay-btn:hover  { transform: translateY(-1px) scale(1.03); filter: brightness(1.06); box-shadow: 0 4px 12px rgba(0,0,0,0.35); }
   .pay-btn:active { transform: scale(0.96); }
-  .pay-btn.free { background:linear-gradient(135deg,#58c96f 0%,#2f9a4b 100%); color:#fff; }
+
+  .pay-btn.free      { background:linear-gradient(135deg,#58c96f 0%,#2f9a4b 100%); color:#fff; }
 
   #absorb-iris {
     position: fixed;
@@ -267,7 +275,9 @@
     transform: translate(-50%, -50%) scale(0.2);
     will-change: transform, opacity;
   }
-  #absorb-iris.active { animation: absorb-iris 4s cubic-bezier(.22,.68,.18,1) forwards; }
+  #absorb-iris.active {
+    animation: absorb-iris 4s cubic-bezier(.22,.68,.18,1) forwards;
+  }
   #absorb-iris::after {
     content: "";
     position: absolute;
@@ -277,7 +287,9 @@
     opacity: 0;
     animation: none;
   }
-  #absorb-iris.active::after { animation: mouth-shadow 4s ease forwards; }
+  #absorb-iris.active::after {
+    animation: mouth-shadow 4s ease forwards;
+  }
   #mouth-tunnel {
     position: fixed;
     left: 50%;
@@ -289,12 +301,19 @@
     pointer-events: none;
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.18);
-    background: radial-gradient(ellipse at center, rgba(44,15,24,0.8) 0%, rgba(86,34,50,0.36) 35%, rgba(240,146,46,0.14) 58%, rgba(0,0,0,0) 72%);
+    background:
+      radial-gradient(ellipse at center,
+        rgba(44,15,24,0.8) 0%,
+        rgba(86,34,50,0.36) 35%,
+        rgba(240,146,46,0.14) 58%,
+        rgba(0,0,0,0) 72%);
     filter: blur(10px);
     mix-blend-mode: multiply;
     will-change: transform, opacity;
   }
-  #mouth-tunnel.active { animation: mouth-tunnel 4s cubic-bezier(.22,.68,.18,1) forwards; }
+  #mouth-tunnel.active {
+    animation: mouth-tunnel 4s cubic-bezier(.22,.68,.18,1) forwards;
+  }
   #suction-lines {
     position: fixed;
     left: 50%;
@@ -306,13 +325,22 @@
     pointer-events: none;
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.18) rotate(0deg);
-    background: repeating-conic-gradient(from 8deg, rgba(255,220,150,0) 0deg, rgba(255,220,150,0.16) 3deg, rgba(255,220,150,0) 8deg, rgba(255,220,150,0) 22deg);
+    background:
+      repeating-conic-gradient(
+        from 8deg,
+        rgba(255,220,150,0) 0deg,
+        rgba(255,220,150,0.16) 3deg,
+        rgba(255,220,150,0) 8deg,
+        rgba(255,220,150,0) 22deg
+      );
     -webkit-mask-image: radial-gradient(circle, transparent 0 19%, #000 34%, transparent 71%);
     mask-image: radial-gradient(circle, transparent 0 19%, #000 34%, transparent 71%);
     filter: blur(1px);
     will-change: transform, opacity;
   }
-  #suction-lines.active { animation: suction-lines 4s cubic-bezier(.22,.68,.18,1) forwards; }
+  #suction-lines.active {
+    animation: suction-lines 4s cubic-bezier(.22,.68,.18,1) forwards;
+  }
 
   #inside-frog {
     position: fixed;
@@ -349,42 +377,180 @@
   #let-me-out:hover { background: rgba(255,255,255,0.16); }
 
   @keyframes absorb-iris {
-    0% { opacity: 0; transform: translate(-50%, -50%) translate(0px, 0px) scale(0.05); }
-    38% { opacity: 0; transform: translate(-50%, -50%) translate(var(--iris-shift-x-38, 0px), var(--iris-shift-y-38, 0px)) scale(0.05); }
-    64% { opacity: 0.08; transform: translate(-50%, -50%) translate(var(--iris-shift-x-64, 0px), var(--iris-shift-y-64, 0px)) scale(1.2); }
-    84% { opacity: 0.68; transform: translate(-50%, -50%) translate(var(--iris-shift-x-84, 0px), var(--iris-shift-y-84, 0px)) scale(13); }
-    100% { opacity: 1; transform: translate(-50%, -50%) translate(var(--iris-shift-x, 0px), var(--iris-shift-y, 0px)) scale(95); }
+    0% {
+      opacity: 0;
+      transform:
+        translate(-50%, -50%)
+        translate(0px, 0px)
+        scale(0.05);
+    }
+    38% {
+      opacity: 0;
+      transform:
+        translate(-50%, -50%)
+        translate(var(--iris-shift-x-38, 0px), var(--iris-shift-y-38, 0px))
+        scale(0.05);
+    }
+    64% {
+      opacity: 0.08;
+      transform:
+        translate(-50%, -50%)
+        translate(var(--iris-shift-x-64, 0px), var(--iris-shift-y-64, 0px))
+        scale(1.2);
+    }
+    84% {
+      opacity: 0.68;
+      transform:
+        translate(-50%, -50%)
+        translate(var(--iris-shift-x-84, 0px), var(--iris-shift-y-84, 0px))
+        scale(13);
+    }
+    100% {
+      opacity: 1;
+      transform:
+        translate(-50%, -50%)
+        translate(var(--iris-shift-x, 0px), var(--iris-shift-y, 0px))
+        scale(95);
+    }
   }
-  @keyframes mouth-shadow { 0%, 28% { opacity: 0; } 52% { opacity: 0.85; } 100% { opacity: 0; } }
+  @keyframes mouth-shadow {
+    0%, 28% { opacity: 0; }
+    52% { opacity: 0.85; }
+    100% { opacity: 0; }
+  }
   @keyframes mouth-tunnel {
-    0% { opacity: 0; transform: translate(-50%, -50%) translate(0px, 0px) scale(0.18); }
-    24% { opacity: 0.28; transform: translate(-50%, -50%) translate(var(--tunnel-shift-x-24, 0px), var(--tunnel-shift-y-24, 0px)) scale(0.55); }
-    52% { opacity: 0.5; transform: translate(-50%, -50%) translate(var(--tunnel-shift-x-52, 0px), var(--tunnel-shift-y-52, 0px)) scale(1.8); }
-    78% { opacity: 0.35; transform: translate(-50%, -50%) translate(var(--tunnel-shift-x-78, 0px), var(--tunnel-shift-y-78, 0px)) scale(5); }
-    100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--tunnel-shift-x, 0px), var(--tunnel-shift-y, 0px)) scale(9); }
+    0% {
+      opacity: 0;
+      transform:
+        translate(-50%, -50%)
+        translate(0px, 0px)
+        scale(0.18);
+    }
+    24% {
+      opacity: 0.28;
+      transform:
+        translate(-50%, -50%)
+        translate(var(--tunnel-shift-x-24, 0px), var(--tunnel-shift-y-24, 0px))
+        scale(0.55);
+    }
+    52% {
+      opacity: 0.5;
+      transform:
+        translate(-50%, -50%)
+        translate(var(--tunnel-shift-x-52, 0px), var(--tunnel-shift-y-52, 0px))
+        scale(1.8);
+    }
+    78% {
+      opacity: 0.35;
+      transform:
+        translate(-50%, -50%)
+        translate(var(--tunnel-shift-x-78, 0px), var(--tunnel-shift-y-78, 0px))
+        scale(5);
+    }
+    100% {
+      opacity: 0;
+      transform:
+        translate(-50%, -50%)
+        translate(var(--tunnel-shift-x, 0px), var(--tunnel-shift-y, 0px))
+        scale(9);
+    }
   }
   @keyframes suction-lines {
-    0%, 16% { opacity: 0; transform: translate(-50%, -50%) translate(0px, 0px) scale(0.18) rotate(0deg); }
-    38% { opacity: 0.22; transform: translate(-50%, -50%) translate(var(--suction-shift-x-38, 0px), var(--suction-shift-y-38, 0px)) scale(0.55) rotate(18deg); }
-    66% { opacity: 0.34; transform: translate(-50%, -50%) translate(var(--suction-shift-x-66, 0px), var(--suction-shift-y-66, 0px)) scale(1.35) rotate(52deg); }
-    88% { opacity: 0.16; transform: translate(-50%, -50%) translate(var(--suction-shift-x-88, 0px), var(--suction-shift-y-88, 0px)) scale(2.6) rotate(88deg); }
-    100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--suction-shift-x, 0px), var(--suction-shift-y, 0px)) scale(3.4) rotate(110deg); }
+    0%, 16% {
+      opacity: 0;
+      transform:
+        translate(-50%, -50%)
+        translate(0px, 0px)
+        scale(0.18)
+        rotate(0deg);
+    }
+    38% {
+      opacity: 0.22;
+      transform:
+        translate(-50%, -50%)
+        translate(var(--suction-shift-x-38, 0px), var(--suction-shift-y-38, 0px))
+        scale(0.55)
+        rotate(18deg);
+    }
+    66% {
+      opacity: 0.34;
+      transform:
+        translate(-50%, -50%)
+        translate(var(--suction-shift-x-66, 0px), var(--suction-shift-y-66, 0px))
+        scale(1.35)
+        rotate(52deg);
+    }
+    88% {
+      opacity: 0.16;
+      transform:
+        translate(-50%, -50%)
+        translate(var(--suction-shift-x-88, 0px), var(--suction-shift-y-88, 0px))
+        scale(2.6)
+        rotate(88deg);
+    }
+    100% {
+      opacity: 0;
+      transform:
+        translate(-50%, -50%)
+        translate(var(--suction-shift-x, 0px), var(--suction-shift-y, 0px))
+        scale(3.4)
+        rotate(110deg);
+    }
   }
   @keyframes mouth-receive {
-    0% { transform: scaleY(1); filter: none; }
-    28% { transform: scale(1.04, 1.08); filter: saturate(1.08); }
-    58% { transform: scale(1.12, 1.22); filter: brightness(0.82) saturate(1.18); }
-    100% { transform: scale(1.22, 1.42); filter: brightness(0.4) saturate(1.3); }
+    0% {
+      transform: scaleY(1);
+      filter: none;
+    }
+    28% {
+      transform: scale(1.04, 1.08);
+      filter: saturate(1.08);
+    }
+    58% {
+      transform: scale(1.12, 1.22);
+      filter: brightness(0.82) saturate(1.18);
+    }
+    100% {
+      transform: scale(1.22, 1.42);
+      filter: brightness(0.4) saturate(1.3);
+    }
   }
   @keyframes camera-mouth-zoom {
     0% { transform: scale(1) translateY(0); filter: none; }
-    12% { transform: translate(var(--mouth-shift-x-12, 0px), var(--mouth-shift-y-12, 0px)) scale(1.1); filter: none; }
-    28% { transform: translate(var(--mouth-shift-x-35, 0px), var(--mouth-shift-y-35, 0px)) scale(1.5); filter: none; }
-    50% { transform: translate(var(--mouth-shift-x-82, 0px), var(--mouth-shift-y-82, 0px)) scale(2.75); filter: brightness(0.96); }
-    74% { transform: translate(var(--mouth-shift-x-100, 0px), var(--mouth-shift-y-100, 0px)) scale(6.2); filter: brightness(0.74) blur(0.5px); }
-    100% { transform: translate(var(--mouth-shift-x, 0px), var(--mouth-shift-y, 0px)) scale(15); filter: brightness(0.28) blur(3.4px); }
+    12% {
+      transform:
+        translate(var(--mouth-shift-x-12, 0px), var(--mouth-shift-y-12, 0px))
+        scale(1.1);
+      filter: none;
+    }
+    28% {
+      transform:
+        translate(var(--mouth-shift-x-35, 0px), var(--mouth-shift-y-35, 0px))
+        scale(1.5);
+      filter: none;
+    }
+    50% {
+      transform:
+        translate(var(--mouth-shift-x-82, 0px), var(--mouth-shift-y-82, 0px))
+        scale(2.75);
+      filter: brightness(0.96);
+    }
+    74% {
+      transform:
+        translate(var(--mouth-shift-x-100, 0px), var(--mouth-shift-y-100, 0px))
+        scale(6.2);
+      filter: brightness(0.74) blur(0.5px);
+    }
+    100% {
+      transform:
+        translate(var(--mouth-shift-x, 0px), var(--mouth-shift-y, 0px))
+        scale(15);
+      filter: brightness(0.28) blur(3.4px);
+    }
   }
-  @keyframes scene-fade { to { opacity: 0; } }
+  @keyframes scene-fade {
+    to { opacity: 0; }
+  }
 </style>
 </head>
 <body>
@@ -432,55 +598,134 @@
           <stop offset="100%" stop-color="#c25b76"/>
         </radialGradient>
       </defs>
+
+      <!-- reeds / cattails behind -->
       <g stroke="url(#blade)" stroke-width="7" stroke-linecap="round" fill="none" opacity="0.95">
-        <path d="M40 285 Q30 180 48 90"/><path d="M70 285 Q66 190 84 120"/><path d="M360 285 Q372 180 352 95"/><path d="M330 285 Q336 195 318 125"/>
+        <path d="M40 285 Q30 180 48 90"/>
+        <path d="M70 285 Q66 190 84 120"/>
+        <path d="M360 285 Q372 180 352 95"/>
+        <path d="M330 285 Q336 195 318 125"/>
       </g>
-      <g fill="#a85a2a"><rect x="42" y="60" width="11" height="34" rx="5"/><rect x="349" y="66" width="11" height="34" rx="5"/></g>
-      <g stroke="#6e3b18" stroke-width="3" stroke-linecap="round"><line x1="47" y1="60" x2="47" y2="44"/><line x1="354" y1="66" x2="354" y2="50"/></g>
+      <g fill="#a85a2a">
+        <rect x="42" y="60" width="11" height="34" rx="5"/>
+        <rect x="349" y="66" width="11" height="34" rx="5"/>
+      </g>
+      <g stroke="#6e3b18" stroke-width="3" stroke-linecap="round">
+        <line x1="47" y1="60" x2="47" y2="44"/>
+        <line x1="354" y1="66" x2="354" y2="50"/>
+      </g>
+
+      <!-- body -->
       <ellipse cx="200" cy="178" rx="196" ry="132" fill="url(#skin)"/>
-      <g fill="#2f6b1f" opacity="0.4"><circle cx="120" cy="150" r="6"/><circle cx="280" cy="158" r="5"/><circle cx="80" cy="200" r="5"/><circle cx="330" cy="205" r="6"/><circle cx="200" cy="250" r="5"/></g>
-      <ellipse cx="186" cy="120" rx="3" ry="4" fill="#234d16"/><ellipse cx="214" cy="120" rx="3" ry="4" fill="#234d16"/>
-      <g class="mouth">
-        <ellipse cx="200" cy="216" rx="158" ry="76" fill="#f0922e"/><ellipse cx="200" cy="216" rx="158" ry="76" fill="none" stroke="#c96d18" stroke-width="3"/>
-        <ellipse id="mouth-cavity" cx="200" cy="222" rx="142" ry="64" fill="url(#cavity)"/><ellipse cx="200" cy="196" rx="88" ry="30" fill="#1c0910" opacity="0.6"/>
-        <ellipse cx="200" cy="268" rx="100" ry="28" fill="url(#tongue)"/><ellipse cx="200" cy="262" rx="66" ry="15" fill="#f0a0b6" opacity="0.7"/>
+      <!-- speckles -->
+      <g fill="#2f6b1f" opacity="0.4">
+        <circle cx="120" cy="150" r="6"/><circle cx="280" cy="158" r="5"/>
+        <circle cx="80" cy="200" r="5"/><circle cx="330" cy="205" r="6"/>
+        <circle cx="200" cy="250" r="5"/>
       </g>
-      <g fill="url(#skin)"><ellipse cx="46" cy="262" rx="40" ry="26" transform="rotate(-12 46 262)"/><ellipse cx="354" cy="262" rx="40" ry="26" transform="rotate(12 354 262)"/></g>
-      <g stroke="#2f6b1f" stroke-width="3" stroke-linecap="round"><line x1="22" y1="272" x2="6" y2="266"/><line x1="30" y1="280" x2="16" y2="282"/><line x1="378" y1="272" x2="394" y2="266"/><line x1="370" y1="280" x2="384" y2="282"/></g>
+
+      <!-- nostrils -->
+      <ellipse cx="186" cy="120" rx="3" ry="4" fill="#234d16"/>
+      <ellipse cx="214" cy="120" rx="3" ry="4" fill="#234d16"/>
+
+      <!-- MOUTH (gapes open in the lower face, below the nostrils) -->
+      <g class="mouth">
+        <!-- orange lips -->
+        <ellipse cx="200" cy="216" rx="158" ry="76" fill="#f0922e"/>
+        <ellipse cx="200" cy="216" rx="158" ry="76" fill="none" stroke="#c96d18" stroke-width="3"/>
+        <!-- dark cavity -->
+        <ellipse id="mouth-cavity" cx="200" cy="222" rx="142" ry="64" fill="url(#cavity)"/>
+        <!-- throat shadow -->
+        <ellipse cx="200" cy="196" rx="88" ry="30" fill="#1c0910" opacity="0.6"/>
+        <!-- tongue -->
+        <ellipse cx="200" cy="268" rx="100" ry="28" fill="url(#tongue)"/>
+        <ellipse cx="200" cy="262" rx="66" ry="15" fill="#f0a0b6" opacity="0.7"/>
+      </g>
+
+      <!-- front feet -->
+      <g fill="url(#skin)">
+        <ellipse cx="46" cy="262" rx="40" ry="26" transform="rotate(-12 46 262)"/>
+        <ellipse cx="354" cy="262" rx="40" ry="26" transform="rotate(12 354 262)"/>
+      </g>
+      <g stroke="#2f6b1f" stroke-width="3" stroke-linecap="round">
+        <line x1="22" y1="272" x2="6" y2="266"/><line x1="30" y1="280" x2="16" y2="282"/>
+        <line x1="378" y1="272" x2="394" y2="266"/><line x1="370" y1="280" x2="384" y2="282"/>
+      </g>
+
+      <!-- eyes (always on top) -->
       <g>
-        <ellipse cx="118" cy="74" rx="56" ry="52" fill="url(#skin)"/><ellipse cx="282" cy="74" rx="56" ry="52" fill="url(#skin)"/>
-        <circle cx="120" cy="80" r="38" fill="url(#eyeRim)"/><circle cx="280" cy="80" r="38" fill="url(#eyeRim)"/>
-        <ellipse cx="120" cy="82" rx="20" ry="30" fill="#0d0a06"/><ellipse cx="280" cy="82" rx="20" ry="30" fill="#0d0a06"/>
-        <circle cx="112" cy="68" r="7" fill="#fff" opacity="0.9"/><circle cx="272" cy="68" r="7" fill="#fff" opacity="0.9"/>
+        <ellipse cx="118" cy="74" rx="56" ry="52" fill="url(#skin)"/>
+        <ellipse cx="282" cy="74" rx="56" ry="52" fill="url(#skin)"/>
+        <circle cx="120" cy="80" r="38" fill="url(#eyeRim)"/>
+        <circle cx="280" cy="80" r="38" fill="url(#eyeRim)"/>
+        <ellipse cx="120" cy="82" rx="20" ry="30" fill="#0d0a06"/>
+        <ellipse cx="280" cy="82" rx="20" ry="30" fill="#0d0a06"/>
+        <circle cx="112" cy="68" r="7" fill="#fff" opacity="0.9"/>
+        <circle cx="272" cy="68" r="7" fill="#fff" opacity="0.9"/>
       </g>
     </svg>
-    <div id="payment-menu"><button class="pay-btn free" data-method="Free"><span>Free</span></button></div>
+
+    <!-- payment menu sits inside the open mouth -->
+    <div id="payment-menu">
+      <button class="pay-btn free" data-method="Free">
+        <span>Free</span>
+      </button>
+    </div>
   </div>
 </div>
 
 <script>
+// Theme toggle
 const themeToggle = document.getElementById('theme-toggle');
-function applyTheme(light) { document.documentElement.classList.toggle('light', light); themeToggle.textContent = light ? 'Sun' : 'Moon'; }
-themeToggle.addEventListener('click', (e) => { e.stopPropagation(); applyTheme(!document.documentElement.classList.contains('light')); });
+function applyTheme(light) {
+  document.documentElement.classList.toggle('light', light);
+  themeToggle.textContent = light ? 'Sun' : 'Moon';
+}
+themeToggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  applyTheme(!document.documentElement.classList.contains('light'));
+});
+
+// Frog
 const frogFace = document.getElementById('frog-face');
 let menuOpen = false;
 let enteringFrog = false;
 const ABSORB_PRE_DELAY = 180;
 const ABSORB_DURATION = 4000;
 function setOpen(open) { menuOpen = open; frogFace.classList.toggle('open', open); }
-frogFace.addEventListener('click', (e) => { if (enteringFrog) return; if (e.target.closest('#payment-menu')) return; e.stopPropagation(); setOpen(!menuOpen); });
-document.addEventListener('click', () => { if (enteringFrog) return; if (menuOpen) setOpen(false); });
+
+frogFace.addEventListener('click', (e) => {
+  if (enteringFrog) return;
+  // clicks on the menu buttons shouldn't toggle the mouth shut
+  if (e.target.closest('#payment-menu')) return;
+  e.stopPropagation();
+  setOpen(!menuOpen);
+});
+document.addEventListener('click', () => {
+  if (enteringFrog) return;
+  if (menuOpen) setOpen(false);
+});
+
+// Enter frog
 const insideFrog = document.getElementById('inside-frog');
 const absorbIris = document.getElementById('absorb-iris');
 const mouthTunnel = document.getElementById('mouth-tunnel');
 const suctionLines = document.getElementById('suction-lines');
 const letMeOut = document.getElementById('let-me-out');
 const scene = document.getElementById('scene');
-function setStagedShift(el, prefix, shiftX, shiftY, stages) { el.style.setProperty(`--${prefix}-shift-x`, `${shiftX}px`); el.style.setProperty(`--${prefix}-shift-y`, `${shiftY}px`); stages.forEach((stage) => { el.style.setProperty(`--${prefix}-shift-x-${stage}`, `${shiftX * stage / 100}px`); el.style.setProperty(`--${prefix}-shift-y-${stage}`, `${shiftY * stage / 100}px`); }); }
+function setStagedShift(el, prefix, shiftX, shiftY, stages) {
+  el.style.setProperty(`--${prefix}-shift-x`, `${shiftX}px`);
+  el.style.setProperty(`--${prefix}-shift-y`, `${shiftY}px`);
+  stages.forEach((stage) => {
+    el.style.setProperty(`--${prefix}-shift-x-${stage}`, `${shiftX * stage / 100}px`);
+    el.style.setProperty(`--${prefix}-shift-y-${stage}`, `${shiftY * stage / 100}px`);
+  });
+}
 function enterFrog() {
   if (enteringFrog || insideFrog.classList.contains('show')) return;
   enteringFrog = true;
   document.body.classList.add('pre-absorbing');
+
   const sceneRect = scene.getBoundingClientRect();
   const target = document.getElementById('mouth-cavity') || document.querySelector('#frog-svg .mouth');
   const mouthRect = target.getBoundingClientRect();
@@ -490,19 +735,65 @@ function enterFrog() {
   const mouthOriginY = mouthY - sceneRect.top;
   const shiftX = window.innerWidth / 2 - mouthX;
   const shiftY = window.innerHeight / 2 - mouthY;
+
   scene.style.setProperty('--mouth-origin-x', `${mouthOriginX}px`);
   scene.style.setProperty('--mouth-origin-y', `${mouthOriginY}px`);
   setStagedShift(scene, 'mouth', shiftX, shiftY, [12, 35, 82, 100]);
-  absorbIris.style.left = `${mouthX}px`; absorbIris.style.top = `${mouthY}px`; setStagedShift(absorbIris, 'iris', shiftX, shiftY, [38, 64, 84]);
-  mouthTunnel.style.left = `${mouthX}px`; mouthTunnel.style.top = `${mouthY}px`; setStagedShift(mouthTunnel, 'tunnel', shiftX, shiftY, [24, 52, 78]);
-  suctionLines.style.left = `${mouthX}px`; suctionLines.style.top = `${mouthY}px`; setStagedShift(suctionLines, 'suction', shiftX, shiftY, [38, 66, 88]);
-  absorbIris.classList.remove('active'); mouthTunnel.classList.remove('active'); suctionLines.classList.remove('active'); absorbIris.offsetHeight; mouthTunnel.offsetHeight; suctionLines.offsetHeight;
-  window.setTimeout(() => { document.body.classList.remove('pre-absorbing'); document.body.classList.add('absorbing'); suctionLines.classList.add('active'); mouthTunnel.classList.add('active'); absorbIris.classList.add('active'); }, ABSORB_PRE_DELAY);
-  window.setTimeout(() => { insideFrog.classList.add('show'); insideFrog.setAttribute('aria-hidden', 'false'); absorbIris.classList.remove('active'); mouthTunnel.classList.remove('active'); suctionLines.classList.remove('active'); document.body.classList.remove('pre-absorbing'); document.body.classList.remove('absorbing'); document.body.classList.add('inside'); enteringFrog = false; }, ABSORB_PRE_DELAY + ABSORB_DURATION);
+  absorbIris.style.left = `${mouthX}px`;
+  absorbIris.style.top = `${mouthY}px`;
+  setStagedShift(absorbIris, 'iris', shiftX, shiftY, [38, 64, 84]);
+  mouthTunnel.style.left = `${mouthX}px`;
+  mouthTunnel.style.top = `${mouthY}px`;
+  setStagedShift(mouthTunnel, 'tunnel', shiftX, shiftY, [24, 52, 78]);
+  suctionLines.style.left = `${mouthX}px`;
+  suctionLines.style.top = `${mouthY}px`;
+  setStagedShift(suctionLines, 'suction', shiftX, shiftY, [38, 66, 88]);
+  absorbIris.classList.remove('active');
+  mouthTunnel.classList.remove('active');
+  suctionLines.classList.remove('active');
+  absorbIris.offsetHeight;
+  mouthTunnel.offsetHeight;
+  suctionLines.offsetHeight;
+
+  window.setTimeout(() => {
+    document.body.classList.remove('pre-absorbing');
+    document.body.classList.add('absorbing');
+    suctionLines.classList.add('active');
+    mouthTunnel.classList.add('active');
+    absorbIris.classList.add('active');
+  }, ABSORB_PRE_DELAY);
+
+  window.setTimeout(() => {
+    insideFrog.classList.add('show');
+    insideFrog.setAttribute('aria-hidden', 'false');
+    absorbIris.classList.remove('active');
+    mouthTunnel.classList.remove('active');
+    suctionLines.classList.remove('active');
+    document.body.classList.remove('pre-absorbing');
+    document.body.classList.remove('absorbing');
+    document.body.classList.add('inside');
+    enteringFrog = false;
+  }, ABSORB_PRE_DELAY + ABSORB_DURATION);
 }
-function exitFrog() { insideFrog.classList.remove('show'); insideFrog.setAttribute('aria-hidden', 'true'); document.body.classList.remove('pre-absorbing'); document.body.classList.remove('absorbing'); document.body.classList.remove('inside'); scene.style.transform = ''; setOpen(false); }
-document.querySelectorAll('.pay-btn').forEach((btn) => { btn.addEventListener('click', (e) => { e.stopPropagation(); enterFrog(); }); });
-letMeOut.addEventListener('click', (e) => { e.stopPropagation(); exitFrog(); });
+function exitFrog() {
+  insideFrog.classList.remove('show');
+  insideFrog.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('pre-absorbing');
+  document.body.classList.remove('absorbing');
+  document.body.classList.remove('inside');
+  scene.style.transform = '';
+  setOpen(false);
+}
+document.querySelectorAll('.pay-btn').forEach((btn) => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    enterFrog();
+  });
+});
+letMeOut.addEventListener('click', (e) => {
+  e.stopPropagation();
+  exitFrog();
+});
 </script>
 </body>
 </html>
