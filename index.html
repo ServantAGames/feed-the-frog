@@ -242,15 +242,14 @@
     background: #000;
   }
   #inside-frog.show {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 18px;
-    padding-top: 0;
+    display: block;
   }
   #stomach-note {
-    max-width: min(620px, 86vw);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(620px, 86vw);
     padding: 18px 22px;
     border: 1px solid rgba(255,255,255,0.18);
     border-radius: 18px;
@@ -263,6 +262,10 @@
     text-shadow: 0 0 18px rgba(255,180,90,0.28);
   }
   #let-me-out {
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
     min-height: 42px;
     padding: 0 18px;
     border-radius: 999px;
