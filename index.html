@@ -32,6 +32,7 @@
     font-family: 'Segoe UI', sans-serif;
     overflow: hidden;
     user-select: none;
+    touch-action: manipulation;
   }
   #header {
     position: fixed;
@@ -167,6 +168,7 @@
     cursor: pointer;
     z-index: 5;
     animation: breathe 4.4s ease-in-out infinite;
+    -webkit-tap-highlight-color: transparent;
   }
   #frog-svg {
     display: block;
@@ -375,6 +377,27 @@
   @keyframes suction-lines { 0%,16%{opacity:0;transform:translate(-50%,-50%) scale(.18) rotate(0)} 38%{opacity:.22;transform:translate(-50%,-50%) scale(.55) rotate(18deg)} 66%{opacity:.34;transform:translate(-50%,-50%) scale(1.35) rotate(52deg)} 88%{opacity:.16;transform:translate(-50%,-50%) scale(2.6) rotate(88deg)} 100%{opacity:0;transform:translate(-50%,-50%) scale(3.4) rotate(110deg)} }
   @keyframes mouth-receive { 0%{transform:scaleY(1)} 28%{transform:scale(1.04,1.08);filter:saturate(1.08)} 58%{transform:scale(1.12,1.22);filter:brightness(.82) saturate(1.18)} 100%{transform:scale(1.22,1.42);filter:brightness(.4) saturate(1.3)} }
   @keyframes camera-mouth-zoom { 0%{transform:scale(1);filter:none} 12%{transform:translate(var(--mouth-shift-x-12,0),var(--mouth-shift-y-12,0)) scale(1.1)} 28%{transform:translate(var(--mouth-shift-x-35,0),var(--mouth-shift-y-35,0)) scale(1.5)} 50%{transform:translate(var(--mouth-shift-x-82,0),var(--mouth-shift-y-82,0)) scale(2.75);filter:brightness(.96)} 74%{transform:translate(var(--mouth-shift-x-100,0),var(--mouth-shift-y-100,0)) scale(6.2);filter:brightness(.74) blur(.5px)} 100%{transform:translate(var(--mouth-shift-x,0),var(--mouth-shift-y,0)) scale(15);filter:brightness(.28) blur(3.4px)} }
+  @media (max-width: 600px) {
+    #header { top: max(10px, env(safe-area-inset-top)); padding: 0 64px 0 12px; }
+    #header h1 { font-size: 1.28rem; letter-spacing: 1.35px; }
+    #theme-toggle { top: max(12px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right)); width: 42px; height: 42px; }
+    #frog-face { width: min(420px, 94vw); top: 52%; }
+    #lily-pad { top: calc(52% + 92px); width: 98vw; height: min(190px, 25vh); }
+    #ground { height: 40vh; }
+    #ground::before { width: 104vw; height: 18vh; top: 16%; }
+    #frog-label { top: -36px; font-size: 0.82rem; padding: 7px 12px; opacity: 1; transform: translateX(-50%) translateY(0); }
+    #payment-menu { width: min(248px, 76vw); top: 74%; }
+    .pay-btn { min-height: 46px; height: 46px; font-size: 1rem; padding: 0 18px; }
+    #stomach-note { width: 88vw; padding: 18px 16px; font-size: clamp(1.05rem, 6vw, 1.45rem); }
+    #let-me-out { top: max(18px, env(safe-area-inset-top)); min-height: 44px; font-size: 0.95rem; }
+    .firefly { transform: scale(0.8); }
+  }
+  @media (max-height: 620px) {
+    #frog-face { width: min(380px, 88vw); top: 55%; }
+    #lily-pad { top: calc(55% + 76px); height: min(155px, 22vh); }
+    #header h1 { font-size: 1.15rem; }
+    #frog-label { display: none; }
+  }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
   }
@@ -443,7 +466,17 @@ let enteringFrog = false;
 const ABSORB_PRE_DELAY = 180;
 const ABSORB_DURATION = 4000;
 function setOpen(open) { menuOpen = open; frogFace.classList.toggle('open', open); }
-frogFace.addEventListener('click', e => { if (enteringFrog || e.target.closest('#payment-menu')) return; e.stopPropagation(); setOpen(!menuOpen); });
+frogFace.addEventListener('click', e => {
+  if (enteringFrog) return;
+  if (e.target.closest('#payment-menu')) return;
+  e.stopPropagation();
+  setOpen(!menuOpen);
+});
+frogFace.addEventListener('touchend', e => {
+  if (enteringFrog || e.target.closest('#payment-menu')) return;
+  e.preventDefault();
+  setOpen(!menuOpen);
+}, { passive: false });
 document.addEventListener('click', () => { if (!enteringFrog && menuOpen) setOpen(false); });
 function setStagedShift(el, prefix, shiftX, shiftY, stages) {
   el.style.setProperty(`--${prefix}-shift-x`, `${shiftX}px`);
