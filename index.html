@@ -72,7 +72,7 @@
     transition: transform 0.2s ease, background 0.25s ease;
   }
   #theme-toggle:hover { transform: scale(1.1) rotate(15deg); }
-  #theme-toggle:focus-visible, .pay-btn:focus-visible, #let-me-out:focus-visible { outline: 3px solid #ffe9a6; outline-offset: 4px; }
+  #theme-toggle:focus-visible, #food-bubble:focus-visible, #let-me-out:focus-visible { outline: 3px solid #ffe9a6; outline-offset: 4px; }
   #scene {
     position: fixed;
     inset: 0;
@@ -215,46 +215,48 @@
     transition: transform 0.32s cubic-bezier(.34,1.25,.6,1);
   }
   #frog-face.open #frog-svg .mouth { transform: scaleY(1); }
-  #payment-menu {
+  #food-bubble {
     position: absolute;
-    top: 72%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(0.7);
-    width: 236px;
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.3s cubic-bezier(.34,1.3,.6,1);
-    z-index: 9;
-  }
-  #frog-face.open #payment-menu {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translate(-50%, -50%) scale(1);
-    transition-delay: 0.12s;
-  }
-  .pay-btn {
+    top: 12%;
+    transform: translate(-50%, 0);
+    min-width: 94px;
+    height: 52px;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(20,10,14,0.72);
+    color: var(--label);
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 40px;
-    padding: 0 16px;
-    border-radius: 999px;
-    border: 1px solid rgba(255,255,255,0.26);
     font-family: inherit;
     font-weight: 900;
-    font-size: 0.98rem;
+    font-size: 1rem;
     letter-spacing: 0.3px;
-    cursor: pointer;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.25);
-    background: linear-gradient(135deg,#77df78,#2f9a4b);
-    color: #fff;
-    text-shadow: 0 1px 0 rgba(0,0,0,0.24);
-    transition: transform 0.15s ease, filter 0.15s ease;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+    backdrop-filter: blur(6px);
+    cursor: grab;
+    z-index: 12;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
   }
-  .pay-btn:hover { transform: translateY(-2px) scale(1.04); filter: brightness(1.08); }
+  #food-bubble::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -7px;
+    width: 14px;
+    height: 14px;
+    transform: translateX(-50%) rotate(45deg);
+    background: inherit;
+    border-right: 1px solid rgba(255,255,255,0.12);
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+  #food-bubble.dragging {
+    cursor: grabbing;
+    box-shadow: 0 18px 34px rgba(0,0,0,0.34);
+  }
   #absorb-iris, #mouth-tunnel, #suction-lines {
     position: fixed;
     left: 50%;
@@ -359,9 +361,8 @@
     box-shadow: 0 12px 34px rgba(0,0,0,0.32);
   }
   #let-me-out:hover { background: rgba(255,255,255,0.17); transform: translateX(-50%) translateY(-1px); }
-  body.pre-absorbing #payment-menu,
-  body.absorbing #payment-menu,
-  body.inside #payment-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+  body.absorbing #food-bubble,
+  body.inside #food-bubble { opacity: 0; visibility: hidden; pointer-events: none; }
   body.absorbing #scene { animation: camera-mouth-zoom 4s cubic-bezier(.22,.68,.18,1) forwards; transform-origin: var(--mouth-origin-x, 50%) var(--mouth-origin-y, 50%); }
   body.inside #scene { transform: translate(var(--mouth-shift-x, 0px), var(--mouth-shift-y, 0px)) scale(15); filter: brightness(0.28) blur(3.4px); transform-origin: var(--mouth-origin-x, 50%) var(--mouth-origin-y, 50%); }
   body.absorbing #header, body.absorbing #theme-toggle, body.inside #header, body.inside #theme-toggle { animation: scene-fade 1s ease forwards; }
@@ -385,9 +386,8 @@
     #lily-pad { top: calc(55% + 84px); width: 92vw; height: min(170px, 22vh); }
     #ground { height: 36vh; }
     #ground::before { width: 94vw; height: 16vh; top: 15%; }
-    #frog-label { top: -36px; font-size: 0.82rem; padding: 7px 12px; opacity: 1; transform: translateX(-50%) translateY(0); }
-    #payment-menu { width: min(248px, 76vw); top: 74%; }
-    .pay-btn { min-height: 46px; height: 46px; font-size: 1rem; padding: 0 18px; }
+    #frog-label { display: none; }
+    #food-bubble { top: -8%; min-width: 86px; height: 48px; font-size: 0.95rem; }
     #stomach-note { width: 88vw; padding: 18px 16px; font-size: clamp(1.05rem, 6vw, 1.45rem); }
     #let-me-out { top: max(18px, env(safe-area-inset-top)); min-height: 44px; font-size: 0.95rem; }
     .firefly { transform: scale(0.8); }
@@ -398,6 +398,7 @@
     #ground { height: 34vh; }
     #header h1 { font-size: 1.15rem; }
     #frog-label { display: none; }
+    #food-bubble { top: -12%; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
@@ -423,7 +424,7 @@
   <div id="ground"></div>
   <div id="lily-pad"></div>
   <div id="frog-face">
-    <div id="frog-label">Feed me</div>
+    <div id="frog-label">Drag food to my mouth</div>
     <svg id="frog-svg" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7cc34a"/><stop offset="55%" stop-color="#4f9a32"/><stop offset="100%" stop-color="#356d22"/></linearGradient>
@@ -443,7 +444,7 @@
       <g stroke="#2f6b1f" stroke-width="3" stroke-linecap="round"><line x1="22" y1="272" x2="6" y2="266"/><line x1="30" y1="280" x2="16" y2="282"/><line x1="378" y1="272" x2="394" y2="266"/><line x1="370" y1="280" x2="384" y2="282"/></g>
       <g><ellipse cx="118" cy="74" rx="56" ry="52" fill="url(#skin)"/><ellipse cx="282" cy="74" rx="56" ry="52" fill="url(#skin)"/><circle cx="120" cy="80" r="38" fill="url(#eyeRim)"/><circle cx="280" cy="80" r="38" fill="url(#eyeRim)"/><ellipse cx="120" cy="82" rx="20" ry="30" fill="#0d0a06"/><ellipse cx="280" cy="82" rx="20" ry="30" fill="#0d0a06"/><circle cx="112" cy="68" r="7" fill="#fff" opacity="0.9"/><circle cx="272" cy="68" r="7" fill="#fff" opacity="0.9"/></g>
     </svg>
-    <div id="payment-menu"><button class="pay-btn" data-method="Free"><span>Hop in</span></button></div>
+    <button id="food-bubble" type="button" aria-label="Drag food to the frog mouth">Food</button>
   </div>
 </div>
 <script>
@@ -456,29 +457,92 @@ function applyTheme(light) {
 }
 themeToggle.addEventListener('click', e => { e.stopPropagation(); applyTheme(!document.documentElement.classList.contains('light')); });
 const frogFace = document.getElementById('frog-face');
+const foodBubble = document.getElementById('food-bubble');
 const insideFrog = document.getElementById('inside-frog');
 const absorbIris = document.getElementById('absorb-iris');
 const mouthTunnel = document.getElementById('mouth-tunnel');
 const suctionLines = document.getElementById('suction-lines');
 const letMeOut = document.getElementById('let-me-out');
 const scene = document.getElementById('scene');
-let menuOpen = false;
 let enteringFrog = false;
+let dragData = null;
+let bubbleHome = null;
 const ABSORB_PRE_DELAY = 180;
 const ABSORB_DURATION = 4000;
-function setOpen(open) { menuOpen = open; frogFace.classList.toggle('open', open); }
+
+function setOpen(open) { frogFace.classList.toggle('open', open); }
+function captureBubbleHome() {
+  if (!foodBubble) return;
+  const rect = foodBubble.getBoundingClientRect();
+  bubbleHome = { left: rect.left + rect.width / 2, top: rect.top };
+}
+function resetFoodBubble(animated = true) {
+  if (!bubbleHome) captureBubbleHome();
+  if (!bubbleHome) return;
+  foodBubble.style.transition = animated ? 'left 0.25s ease, top 0.25s ease, opacity 0.2s ease' : 'none';
+  foodBubble.style.left = `${bubbleHome.left}px`;
+  foodBubble.style.top = `${bubbleHome.top}px`;
+  foodBubble.style.transform = 'translate(-50%, 0)';
+  setTimeout(() => { foodBubble.style.transition = ''; }, 260);
+}
+function getMouthCenter() {
+  const mouth = document.getElementById('mouth-cavity') || document.querySelector('#frog-svg .mouth');
+  const rect = mouth.getBoundingClientRect();
+  return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+}
+function startDrag(clientX, clientY) {
+  if (enteringFrog || insideFrog.classList.contains('show')) return;
+  if (!bubbleHome) captureBubbleHome();
+  const rect = foodBubble.getBoundingClientRect();
+  dragData = { offsetX: clientX - rect.left, offsetY: clientY - rect.top };
+  foodBubble.classList.add('dragging');
+  foodBubble.style.transition = 'none';
+  foodBubble.style.transform = 'none';
+  setOpen(true);
+}
+function moveDrag(clientX, clientY) {
+  if (!dragData) return;
+  foodBubble.style.left = `${clientX - dragData.offsetX + foodBubble.offsetWidth / 2}px`;
+  foodBubble.style.top = `${clientY - dragData.offsetY}px`;
+}
+function endDrag(clientX, clientY) {
+  if (!dragData) return;
+  dragData = null;
+  foodBubble.classList.remove('dragging');
+  const mouth = getMouthCenter();
+  const distance = Math.hypot(clientX - mouth.x, clientY - mouth.y);
+  if (distance < Math.max(72, window.innerWidth * 0.12)) {
+    setOpen(true);
+    foodBubble.style.opacity = '0';
+    setTimeout(() => { enterFrog(); }, 180);
+  } else {
+    resetFoodBubble(true);
+    setTimeout(() => setOpen(false), 240);
+  }
+}
+
 frogFace.addEventListener('click', e => {
-  if (enteringFrog) return;
-  if (e.target.closest('#payment-menu')) return;
+  if (enteringFrog || e.target === foodBubble) return;
   e.stopPropagation();
-  setOpen(!menuOpen);
+  setOpen(true);
 });
-frogFace.addEventListener('touchend', e => {
-  if (enteringFrog || e.target.closest('#payment-menu')) return;
+foodBubble.addEventListener('pointerdown', e => {
   e.preventDefault();
-  setOpen(!menuOpen);
-}, { passive: false });
-document.addEventListener('click', () => { if (!enteringFrog && menuOpen) setOpen(false); });
+  e.stopPropagation();
+  startDrag(e.clientX, e.clientY);
+  foodBubble.setPointerCapture?.(e.pointerId);
+});
+window.addEventListener('pointermove', e => moveDrag(e.clientX, e.clientY));
+window.addEventListener('pointerup', e => endDrag(e.clientX, e.clientY));
+foodBubble.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    setOpen(true);
+    foodBubble.style.opacity = '0';
+    setTimeout(() => enterFrog(), 180);
+  }
+});
+
 function setStagedShift(el, prefix, shiftX, shiftY, stages) {
   el.style.setProperty(`--${prefix}-shift-x`, `${shiftX}px`);
   el.style.setProperty(`--${prefix}-shift-y`, `${shiftY}px`);
@@ -503,11 +567,29 @@ function enterFrog() {
   setStagedShift(scene, 'mouth', shiftX, shiftY, [12, 35, 82, 100]);
   [absorbIris, mouthTunnel, suctionLines].forEach(el => { el.style.left = `${mouthX}px`; el.style.top = `${mouthY}px`; el.classList.remove('active'); el.offsetHeight; });
   setTimeout(() => { document.body.classList.remove('pre-absorbing'); document.body.classList.add('absorbing'); suctionLines.classList.add('active'); mouthTunnel.classList.add('active'); absorbIris.classList.add('active'); }, ABSORB_PRE_DELAY);
-  setTimeout(() => { insideFrog.classList.add('show'); insideFrog.setAttribute('aria-hidden', 'false'); absorbIris.classList.remove('active'); mouthTunnel.classList.remove('active'); suctionLines.classList.remove('active'); document.body.classList.remove('pre-absorbing', 'absorbing'); document.body.classList.add('inside'); enteringFrog = false; }, ABSORB_PRE_DELAY + ABSORB_DURATION);
+  setTimeout(() => {
+    insideFrog.classList.add('show');
+    insideFrog.setAttribute('aria-hidden', 'false');
+    absorbIris.classList.remove('active');
+    mouthTunnel.classList.remove('active');
+    suctionLines.classList.remove('active');
+    document.body.classList.remove('pre-absorbing', 'absorbing');
+    document.body.classList.add('inside');
+    enteringFrog = false;
+  }, ABSORB_PRE_DELAY + ABSORB_DURATION);
 }
-function exitFrog() { insideFrog.classList.remove('show'); insideFrog.setAttribute('aria-hidden', 'true'); document.body.classList.remove('pre-absorbing', 'absorbing', 'inside'); scene.style.transform = ''; setOpen(false); }
-document.querySelectorAll('.pay-btn').forEach(btn => btn.addEventListener('click', e => { e.stopPropagation(); enterFrog(); }));
+function exitFrog() {
+  insideFrog.classList.remove('show');
+  insideFrog.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('pre-absorbing', 'absorbing', 'inside');
+  scene.style.transform = '';
+  foodBubble.style.opacity = '1';
+  setOpen(false);
+  resetFoodBubble(false);
+}
 letMeOut.addEventListener('click', e => { e.stopPropagation(); exitFrog(); });
+window.addEventListener('load', captureBubbleHome);
+window.addEventListener('resize', () => { foodBubble.style.left = ''; foodBubble.style.top = ''; foodBubble.style.transform = 'translate(-50%, 0)'; setTimeout(captureBubbleHome, 50); });
 </script>
 </body>
 </html>
