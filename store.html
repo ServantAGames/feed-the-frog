@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feed Me â€” Store ðŸ¸</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --green: #2ecc71;
+    --dark-green: #1a8a4a;
+    --gold: #f1c40f;
+    --bg: #0d1a0d;
+    --card: #152015;
+    --border: #2a3a2a;
+  }
+
+  body {
+    background: var(--bg);
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    color: #fff;
+  }
+
+  /* â”€â”€â”€ HEADER â”€â”€â”€ */
+  header {
+    text-align: center;
+    padding: 40px 20px 10px;
+    position: relative;
+  }
+  header .back-btn {
+    position: absolute;
+    left: 20px;
+    top: 42px;
+    color: #555;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  header .back-btn:hover { color: var(--green); }
+
+  header .frog { font-size: 3.5rem; display: block; margin-bottom: 8px; }
+  header h1 {
+    font-size: 2rem;
+    color: var(--green);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  header p {
+    color: #666;
+    font-size: 0.85rem;
+    margin-top: 6px;
+  }
+
+  /* â”€â”€â”€ TEST MODE BANNER â”€â”€â”€ */
+  #test-banner {
+    background: #1a1000;
+    border: 1px solid #5a3a00;
+    color: #f39c12;
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 0.8rem;
+    margin: 20px auto;
+    max-width: 700px;
+    border-radius: 10px;
+  }
+  #test-banner strong { color: #f1c40f; }
+  #test-banner code {
+    background: #2a1a00;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+  }
+
+  /* â”€â”€â”€ PRODUCTS GRID â”€â”€â”€ */
+  #store {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 20px;
+  }
+
+  .product-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 24px;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .product-card.popular {
+    border-color: var(--gold);
+    box-shadow: 0 0 20px rgba(241,196,15,0.15);
+  }
+  .product-card.popular::before {
+    content: 'â­ MOST POPULAR';
+    position: absolute;
+    top: 12px; right: -28px;
+    background: var(--gold);
+    color: #111;
+    font-size: 0.6rem;
+    font-weight: bold;
+    padding: 4px 36px;
+    transform: rotate(45deg);
+    letter-spacing: 1px;
+  }
+
+  .product-icon { font-size: 3.5rem; margin-bottom: 12px; display: block; }
+  .product-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .product-desc {
+    color: #666;
+    font-size: 0.8rem;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+  .product-health {
+    display: inline-block;
+    background: #0d2a0d;
+    border: 1px solid #2a5a2a;
+    color: var(--green);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  .product-price {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+  .product-price span { font-size: 1rem; color: #555; }
+
+  .buy-btn {
+    width: 100%;
+    padding: 13px;
+    border-radius: 12px;
+    border: none;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.5px;
+  }
+  .buy-btn:active { transform: scale(0.97); }
+
+  .btn-bronze  { background: linear-gradient(135deg, #cd7f32, #a0522d); color: #fff; }
+  .btn-silver  { background: linear-gradient(135deg, #bdc3c7, #7f8c8d); color: #fff; }
+  .btn-gold    { background: linear-gradient(135deg, #f1c40f, #e67e22); color: #fff; }
+  .btn-diamond { background: linear-gradient(135deg, #a29bfe, #6c5ce7); color: #fff; }
+
+  .buy-btn:hover { opacity: 0.9; transform: scale(1.02); }
+
+  /* â”€â”€â”€ SUCCESS / CANCEL BANNERS â”€â”€â”€ */
+  #status-banner {
+    display: none;
+    max-width: 700px;
+    margin: 0 auto 20px;
+    padding: 16px 24px;
+    border-radius: 14px;
+    text-align: center;
+    font-weight: bold;
+  }
+  #status-banner.success {
+    display: block;
+    background: #0d2a0d;
+    border: 1px solid var(--green);
+    color: var(--green);
+  }
+  #status-banner.cancelled {
+    display: block;
+    background: #1a0d0d;
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+  }
+
+  /* â”€â”€â”€ SETUP PANEL (dev only) â”€â”€â”€ */
+  #setup-panel {
+    max-width: 700px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+  }
+  #setup-panel details {
+    background: #0d1a0d;
+    border: 1px solid #2a3a2a;
+    border-radius: 14px;
+    padding: 16px 20px;
+  }
+  #setup-panel summary {
+    color: #555;
+    font-size: 0.8rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  #setup-panel summary:hover { color: #888; }
+  #setup-panel .setup-body { margin-top: 16px; }
+  #setup-panel label {
+    display: block;
+    color: #666;
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+    margin-top: 12px;
+  }
+  #setup-panel input {
+    width: 100%;
+    padding: 8px 12px;
+    background: #111;
+    border: 1px solid #2a3a2a;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.85rem;
+    outline: none;
+    font-family: monospace;
+  }
+  #setup-panel input:focus { border-color: var(--green); }
+  #setup-panel .save-btn {
+    margin-top: 12px;
+    padding: 8px 20px;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+  #setup-panel .hint {
+    color: #444;
+    font-size: 0.72rem;
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+
+  /* â”€â”€â”€ FOOTER â”€â”€â”€ */
+  footer {
+    text-align: center;
+    color: #333;
+    font-size: 0.7rem;
+    padding: 30px 20px 40px;
+    line-height: 1.8;
+  }
+  footer a { color: #444; }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back-btn" href="feed-me.html">â† Back to game</a>
+  <span class="frog">ðŸ¸</span>
+  <h1>Feed Me â€” Store</h1>
+  <p>Every dollar goes directly into the frog's stomach</p>
+</header>
+
+<!-- Status banner (shown on return from Stripe) -->
+<div id="status-banner"></div>
+
+<!-- Test mode notice -->
+<div id="test-banner">
+  <strong>âš¡ Test Mode</strong> â€” Payments are simulated. Use Stripe test card <code>4242 4242 4242 4242</code>, any future expiry, any CVC.
+  Real purchases go live once you add your Stripe Payment Links below.
+</div>
+
+<!-- Products -->
+<div id="store">
+
+  <div class="product-card">
+    <span class="product-icon">ðŸª™</span>
+    <div class="product-name">Coin</div>
+    <div class="product-desc">A single coin. The frog will accept it.<br>Begrudgingly.</div>
+    <div class="product-health">+1% health</div>
+    <div class="product-price">$0.99 <span>USD</span></div>
+    <button class="buy-btn btn-bronze" onclick="purchase('coin')">Buy Coin ðŸª™</button>
+  </div>
+
+  <div class="product-card">
+    <span class="product-icon">ðŸ’µ</span>
+    <div class="product-name">Dollar Bill</div>
+    <div class="product-desc">Now we're talking. The frog will burp.<br>That's a good sign.</div>
+    <div class="product-health">+3% health</div>
+    <div class="product-price">$2.99 <span>USD</span></div>
+    <button class="buy-btn btn-silver" onclick="purchase('bill')">Buy Bill ðŸ’µ</button>
+  </div>
+
+  <div class="product-card popular">
+    <span class="product-icon">ðŸ’°</span>
+    <div class="product-name">Fat Stack</div>
+    <div class="product-desc">The frog's eyes will turn to dollar signs.<br>Eyes. Dollar signs. Both.</div>
+    <div class="product-health">+10% health</div>
+    <div class="product-price">$9.99 <span>USD</span></div>
+    <button class="buy-btn btn-gold" onclick="purchase('stack')">Buy Stack ðŸ’°</button>
+  </div>
+
+  <div class="product-card">
+    <span class="product-icon">ðŸ†</span>
+    <div class="product-name">Tribute</div>
+    <div class="product-desc">The frog will remember this forever.<br>A crown will appear.</div>
+    <div class="product-health">+50% health</div>
+    <div class="product-price">$49.99 <span>USD</span></div>
+    <button class="buy-btn btn-diamond" onclick="purchase('tribute')">Pay Tribute ðŸ†</button>
+  </div>
+
+</div>
+
+<!-- Dev setup panel -->
+<div id="setup-panel">
+  <details>
+    <summary>âš™ï¸ Setup â€” Add your Stripe Payment Links</summary>
+    <div class="setup-body">
+      <p style="color:#666;font-size:0.78rem;line-height:1.6">
+        Create 4 products in your <a href="https://dashboard.stripe.com/payment-links" target="_blank" style="color:#555">Stripe dashboard</a>
+        â†’ Payment Links. Paste the URLs below. Each URL should have
+        <code style="font-size:0.75rem">?success=true</code> and <code style="font-size:0.75rem">?cancelled=true</code>
+        redirect URLs pointing back to <strong>store.html</strong>.
+      </p>
+      <label>Coin ($0.99) â€” Payment Link URL</label>
+      <input id="link-coin" type="url" placeholder="https://buy.stripe.com/..." />
+      <label>Dollar Bill ($2.99) â€” Payment Link URL</label>
+      <input id="link-bill" type="url" placeholder="https://buy.stripe.com/..." />
+      <label>Fat Stack ($9.99) â€” Payment Link URL</label>
+      <input id="link-stack" type="url" placeholder="https://buy.stripe.com/..." />
+      <label>Tribute ($49.99) â€” Payment Link URL</label>
+      <input id="link-tribute" type="url" placeholder="https://buy.stripe.com/..." />
+      <button class="save-btn" onclick="saveLinks()">Save Links</button>
+      <p class="hint">
+        Links are saved in your browser's local storage â€” no server needed.<br>
+        For Stripe redirect URLs, set success URL to: <strong>store.html?success=true&item={ITEM}</strong><br>
+        and cancel URL to: <strong>store.html?cancelled=true</strong>
+      </p>
+    </div>
+  </details>
+</div>
+
+<footer>
+  Feed Me Â© 2026 â€” A game about feeding a frog your actual money.<br>
+  All purchases are final. The frog thanks you.<br>
+  <a href="#">Privacy Policy</a> Â· <a href="#">Terms of Service</a>
+</footer>
+
+<script>
+// â”€â”€â”€ PRODUCTS MAP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+const PRODUCTS = {
+  coin:    { name: 'Coin',        price: '$0.99',  icon: 'ðŸª™', health: 1  },
+  bill:    { name: 'Dollar Bill', price: '$2.99',  icon: 'ðŸ’µ', health: 3  },
+  stack:   { name: 'Fat Stack',   price: '$9.99',  icon: 'ðŸ’°', health: 10 },
+  tribute: { name: 'Tribute',     price: '$49.99', icon: 'ðŸ†', health: 50 },
+};
+
+// â”€â”€â”€ LOAD SAVED LINKS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function loadLinks() {
+  ['coin','bill','stack','tribute'].forEach(id => {
+    const saved = localStorage.getItem('feedme_link_' + id);
+    if (saved) {
+      const el = document.getElementById('link-' + id);
+      if (el) el.value = saved;
+    }
+  });
+}
+
+function saveLinks() {
+  ['coin','bill','stack','tribute'].forEach(id => {
+    const el = document.getElementById('link-' + id);
+    if (el && el.value.trim()) {
+      localStorage.setItem('feedme_link_' + id, el.value.trim());
+    }
+  });
+  showBanner('success', 'âœ“ Links saved. Buy buttons are now live.');
+}
+
+// â”€â”€â”€ PURCHASE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function purchase(id) {
+  const product = PRODUCTS[id];
+  const link = localStorage.getItem('feedme_link_' + id);
+
+  if (link) {
+    // Real Stripe Payment Link â€” add return URLs
+    const returnBase = encodeURIComponent(location.href.split('?')[0]);
+    const url = link.includes('?')
+      ? `${link}&success_url=${returnBase}%3Fsuccess%3Dtrue%26item%3D${id}&cancel_url=${returnBase}%3Fcancelled%3Dtrue`
+      : `${link}?success_url=${returnBase}%3Fsuccess%3Dtrue%26item%3D${id}&cancel_url=${returnBase}%3Fcancelled%3Dtrue`;
+    location.href = url;
+  } else {
+    // Test mode â€” simulate purchase
+    simulatePurchase(id, product);
+  }
+}
+
+function simulatePurchase(id, product) {
+  // Fake checkout modal
+  const overlay = document.createElement('div');
+  overlay.style.cssText = `
+    position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;
+    display:flex;align-items:center;justify-content:center;
+  `;
+  overlay.innerHTML = `
+    <div style="background:#1e2e1e;border:1px solid #3a5a3a;border-radius:20px;
+                padding:32px 28px;max-width:340px;width:90%;text-align:center;">
+      <div style="font-size:3rem;margin-bottom:10px">${product.icon}</div>
+      <h2 style="color:#fff;margin-bottom:6px">${product.name}</h2>
+      <div style="color:#f1c40f;font-size:1.8rem;font-weight:bold;margin:12px 0">${product.price}</div>
+      <p style="color:#aaa;font-size:0.8rem;margin-bottom:8px">
+        ðŸ§ª <strong style="color:#f39c12">Test mode</strong> â€” no real charge.<br>
+        Add your Stripe link below to go live.
+      </p>
+      <div style="background:#111;border-radius:10px;padding:14px;margin:14px 0;text-align:left">
+        <div style="color:#555;font-size:0.7rem;margin-bottom:4px">Test card number</div>
+        <div style="color:#fff;font-family:monospace;font-size:0.9rem">4242 4242 4242 4242</div>
+        <div style="display:flex;gap:16px;margin-top:8px">
+          <div><div style="color:#555;font-size:0.7rem">Expiry</div><div style="color:#fff;font-family:monospace">12/29</div></div>
+          <div><div style="color:#555;font-size:0.7rem">CVC</div><div style="color:#fff;font-family:monospace">123</div></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:4px">
+        <button onclick="this.closest('div[style]').remove()"
+          style="flex:1;padding:10px;border-radius:10px;border:1px solid #333;
+                 background:transparent;color:#888;cursor:pointer;font-size:0.85rem">
+          Cancel
+        </button>
+        <button onclick="confirmTestPurchase('${id}', this)"
+          style="flex:2;padding:10px;border-radius:10px;border:none;
+                 background:#2ecc71;color:#fff;font-weight:bold;cursor:pointer;font-size:0.95rem">
+          Confirm (test) âœ“
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+}
+
+function confirmTestPurchase(id, btn) {
+  const product = PRODUCTS[id];
+  btn.closest('div[style*="position:fixed"]').remove();
+
+  // Store result for game to pick up
+  const pending = JSON.parse(localStorage.getItem('feedme_pending_feed') || '[]');
+  pending.push({ id, health: product.health, ts: Date.now() });
+  localStorage.setItem('feedme_pending_feed', JSON.stringify(pending));
+
+  showBanner('success',
+    `${product.icon} ${product.name} purchased! +${product.health}% health added to the frog.<br>
+     <a href="feed-me.html" style="color:#2ecc71;text-decoration:none;font-size:0.9rem">
+     â† Return to game to feed the frog</a>`
+  );
+}
+
+// â”€â”€â”€ HANDLE STRIPE REDIRECT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+function handleReturnFromStripe() {
+  const params = new URLSearchParams(location.search);
+  if (params.get('success') === 'true') {
+    const id = params.get('item');
+    const product = PRODUCTS[id] || {};
+    // Store purchase for game
+    if (id) {
+      const pending = JSON.parse(localStorage.getItem('feedme_pending_feed') || '[]');
+      pending.push({ id, health: product.health || 1, ts: Date.now() });
+      localStorage.setItem('feedme_pending_feed', JSON.stringify(pending));
+    }
+    showBanner('success',
+      `${product.icon || 'ðŸ¸'} Payment successful! The frog is about to be very happy.<br>
+       <a href="feed-me.html" style="color:#2ecc71;text-decoration:none;font-size:0.9rem">
+       â† Return to game to feed the frog</a>`
+    );
+    history.replaceState({}, '', 'store.html');
+  } else if (params.get('cancelled') === 'true') {
+    showBanner('cancelled', 'âœ• Purchase cancelled. The frog is disappointed.');
+    history.replaceState({}, '', 'store.html');
+  }
+}
+
+function showBanner(type, html) {
+  const el = document.getElementById('status-banner');
+  el.className = type;
+  el.innerHTML = html;
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// â”€â”€â”€ INIT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+loadLinks();
+handleReturnFromStripe();
+</script>
+</body>
+</html>
